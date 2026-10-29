@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8c1515">
+  <title>Project 2A · Messages through sound</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">ENGR 76 <span aria-hidden="true">/</span> Project 2A</p>
+      <h1>Messages through sound.</h1>
+      <p class="intro">Turn a short message into a tone. Let another device listen.</p>
+    </header>
+
+    <section class="guide" aria-label="How to connect two devices">
+      <ol>
+        <li><span>01</span><div>Open this page and choose your completed notebook on both devices.<small>Wait for “Ready” and choose the same transmission rate.</small></div></li>
+        <li><span>02</span><div>Start Receive on your phone.<small>Allow microphone access and wait for “listening.”</small></div></li>
+        <li><span>03</span><div>Send from your laptop, then Stop on your phone.<small>Wait for the tone to finish before decoding.</small></div></li>
+      </ol>
+    </section>
+
+    <section class="workspace" aria-label="Sound messenger">
+      <label for="notebook">Your Project 2a notebook</label>
+      <input id="notebook" type="file" accept=".ipynb" aria-describedby="notebook-hint notebook-status">
+      <p id="notebook-hint" class="hint">Choose your completed project2a.ipynb. Your file stays in this browser.</p>
+      <p class="hint">Transfer your completed notebook to your phone using AirDrop or <a href="https://snapdrop.me" target="_blank" rel="noopener noreferrer">Snapdrop</a>. For Snapdrop, both devices should be on the same Wi-Fi. Save the notebook on your phone, then open this page on your phone and choose the saved notebook above.</p>
+      <p id="notebook-status" class="hint" role="status" aria-live="polite">No notebook loaded.</p>
+
+      <div class="rate-row">
+        <label for="rate">Transmission rate</label>
+        <select id="rate" aria-describedby="rate-hint">
+          <option value="50" selected>50 bits/s</option>
+          <option value="100">100 bits/s</option>
+          <option value="200">200 bits/s</option>
+        </select>
+      </div>
+      <p id="rate-hint" class="hint">Use the same rate on both devices. Start at 50 bits/s, then try a faster rate.</p>
+
+      <div class="rate-row">
+        <label for="carrier">Carrier frequency (Hz)</label>
+        <input id="carrier" type="number" min="200" max="8000" step="any" value="2000" aria-describedby="carrier-hint">
+      </div>
+      <p id="carrier-hint" class="hint">200–8000 Hz. Changes the sender's tone; the receiver only needs the same transmission rate.</p>
+
+      <label for="message">Message</label>
+      <textarea id="message" rows="4" placeholder="Hello from my laptop!" aria-describedby="message-info limits" spellcheck="false"></textarea>
+      <p id="message-info" class="hint">Enter a short message to send.</p>
+
+      <div class="actions">
+        <button id="send" class="primary" disabled>Send</button>
+        <button id="receive" disabled>Receive</button>
+        <button id="stop" class="quiet" disabled>Stop</button>
+      </div>
+      <div class="status-row">
+        <span id="state-dot" class="state-dot" aria-hidden="true"></span>
+        <p id="status" role="status" aria-live="polite">Choose your completed Project 2a notebook to begin.</p>
+        <button id="retry" class="retry" hidden>Retry</button>
+      </div>
+      <p id="secure-notice" class="notice" hidden>Microphone access needs HTTPS (or localhost on this device). A plain LAN HTTP address will not enable your phone’s microphone.</p>
+      <noscript><p class="notice">Enable JavaScript to run Python and audio in your browser.</p></noscript>
+
+      <div class="received">
+        <h2>Decoded message</h2>
+        <p id="decoded" aria-live="polite" class="empty">Your received message will appear here.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p id="limits">Up to 15 seconds per send and 20 seconds per recording. Maximum 256 UTF-8 bytes; slower rates allow fewer bytes.</p>
+      <p>Keep the devices nearby in a quiet room, use a comfortable speaker volume, and keep this page open. This simple acoustic demo may need another try.</p>
+      <p>Encoding and decoding run locally. Only the page and Python runtime are downloaded; your message travels through sound.</p>
+      <p><a href="./guide.html">Play with distance, noise and a friend’s phone →</a></p>
+    </footer>
+  </main>
+</body>
+</html>

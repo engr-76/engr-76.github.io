@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8c1515">
+  <title>Project 2D · Encrypted messages through sound</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">ENGR 76 <span aria-hidden="true">/</span> Project 2D</p>
+    <h1>Encrypted messages through sound.</h1>
+    <p class="intro">Encrypt a short message. Send it as a tone. Let another device listen and decrypt.</p>
+  </header>
+  <section class="guide" aria-label="How to connect two devices">
+    <ol>
+      <li><span>01</span><div>Choose both completed notebooks on each device.<small>Wait for “Ready.” Enter the same password and choose the same rate.</small></div></li>
+      <li><span>02</span><div>Start Receive on your phone.<small>Allow microphone access and wait for “listening.”</small></div></li>
+      <li><span>03</span><div>Send from your laptop, then Stop &amp; decode on your phone.<small>Wait for the whole tone to finish before decoding.</small></div></li>
+    </ol>
+  </section>
+  <section class="workspace" aria-label="Encrypted sound messenger">
+    <div class="notebooks">
+      <label for="crypto-notebook">Your completed Project 2d notebook</label>
+      <input id="crypto-notebook" type="file" accept=".ipynb" aria-describedby="crypto-hint crypto-status">
+      <p id="crypto-hint" class="hint">Uses your xor_bytes, encrypt and decrypt functions and the supplied keystream helper.</p>
+      <p id="crypto-status" class="hint notebook-status" role="status" aria-live="polite">No notebook selected.</p>
+      <label for="codec-notebook">Your completed Project 2c notebook</label>
+      <input id="codec-notebook" type="file" accept=".ipynb" aria-describedby="codec-hint codec-status">
+      <p id="codec-hint" class="hint">Uses your convolutional encoder, trellis, Viterbi decoder and Part 3 signal helpers, including your bandpass filter.</p>
+      <p id="codec-status" class="hint notebook-status" role="status" aria-live="polite">No notebook selected.</p>
+      <p class="hint">Both files stay in this browser. Transfer them to your phone with AirDrop or <a href="https://snapdrop.me" target="_blank" rel="noopener noreferrer">Snapdrop</a>, save them in Files or Downloads, then choose them here. For Snapdrop, put both devices on the same Wi-Fi. <a href="./guide.html">Step-by-step guide →</a></p>
+    </div>
+    <label for="password">Shared password on this device</label>
+    <input id="password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="password-hint">
+    <p id="password-hint" class="hint">Agree on the password separately. The tone contains only a random 16-byte nonce and ciphertext; it never contains the password.</p>
+    <div class="rate-row">
+      <label for="rate">Transmission rate</label>
+      <select id="rate" aria-describedby="rate-hint">
+        <option value="50">50 bits/s</option>
+        <option value="100" selected>100 bits/s</option>
+        <option value="200">200 bits/s</option>
+      </select>
+    </div>
+    <p id="rate-hint" class="hint">Use the same rate on both devices. Start at 100 bits/s.</p>
+    <details class="settings">
+      <summary>Sound settings</summary>
+      <div class="rate-row">
+        <label for="carrier">Sender carrier (Hz)</label>
+        <input id="carrier" type="number" min="200" max="8000" step="any" value="2000">
+      </div>
+      <p class="hint">200–8000 Hz. Keep the sender’s carrier inside the receiver’s filter bounds.</p>
+      <div class="filter-panel">
+        <label class="filter-switch" for="use-filter"><input id="use-filter" type="checkbox" checked> Use my bandpass filter</label>
+        <div class="filter-bounds">
+          <label for="filter-min">Lower (Hz)<input id="filter-min" type="number" min="0" max="22050" step="any" value="1500"></label>
+          <span aria-hidden="true">–</span>
+          <label for="filter-max">Upper (Hz)<input id="filter-max" type="number" min="0" max="22050" step="any" value="2500"></label>
+        </div>
+        <p class="hint">These settings apply when you next press Receive. Start with the defaults.</p>
+      </div>
+    </details>
+    <label for="message">Message to send</label>
+    <textarea id="message" rows="3" placeholder="Hello from my laptop!" spellcheck="false" aria-describedby="message-info"></textarea>
+    <p id="message-info" class="hint">At 100 bits/s, send up to 66 UTF-8 message bytes plus the nonce.</p>
+    <div class="actions">
+      <button id="send" class="primary" disabled>Send</button>
+      <button id="receive" disabled>Receive</button>
+      <button id="stop" class="quiet" disabled>Stop &amp; decode</button>
+    </div>
+    <div class="status-row">
+      <span id="state-dot" class="state-dot" aria-hidden="true"></span>
+      <p id="status" role="status" aria-live="polite">Choose your completed Project 2d and Project 2c notebooks to begin.</p>
+      <button id="cancel" class="retry" hidden>Cancel</button>
+      <button id="retry" class="retry" hidden>Retry</button>
+    </div>
+    <p id="secure-notice" class="notice" hidden>Microphone access needs HTTPS (or localhost on this device). A plain LAN HTTP address will not enable your phone’s microphone.</p>
+    <noscript><p class="notice">Enable JavaScript to run Python and audio in your browser.</p></noscript>
+    <div class="received">
+      <h2>Received &amp; decrypted</h2>
+      <p id="recovered-text" class="empty" aria-live="polite">Your received message will appear here.</p>
+      <p id="recovered-info" class="hint"></p>
+      <details class="bytes"><summary>Recovered bytes (hex)</summary><pre id="recovered-hex">—</pre></details>
+    </div>
+  </section>
+  <details class="experiments">
+    <summary>Try a different password or change one ciphertext bit</summary>
+    <p id="packet-info" class="hint">Send or receive a packet first. These experiments run locally on that packet.</p>
+    <label for="experiment-password">Password for this experiment</label>
+    <input id="experiment-password" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <p class="hint">Try a different password, then compare the bytes. Use the original password when exploring the effect of a changed ciphertext bit.</p>
+    <button id="try-password" disabled>Decrypt with this password</button>
+    <div class="bit-controls">
+      <label for="byte-index">Ciphertext byte (from 0)<input id="byte-index" type="number" min="0" max="0" step="1" value="0"></label>
+      <label for="bit-index">Bit (0 = least significant)<input id="bit-index" type="number" min="0" max="7" step="1" value="0"></label>
+      <button id="flip" disabled>Flip one bit &amp; compare</button>
+    </div>
+    <div id="experiment-result" hidden>
+      <p id="bit-result" class="hint" aria-live="polite"></p>
+      <p id="experiment-text" class="recovered"></p>
+      <div id="before-row" hidden><h2>Before (hex)</h2><pre id="before-hex"></pre></div>
+      <h2>Recovered bytes (hex)</h2><pre id="experiment-hex"></pre>
+    </div>
+    <p class="hint">The notebook’s encryption provides no password verification or authentication. A wrong password or altered ciphertext still produces bytes.</p>
+  </details>
+  <footer>
+    <p>Trying the live audio demo and providing feedback in the reflection survey are required. If a technical problem prevents completion, describe what you tried and what went wrong; a successful transmission is not required.</p>
+    <p>At 50 / 100 / 200 bits/s: up to 22 / 66 / 153 message UTF-8 bytes, plus the 16-byte nonce. Empty messages are supported. Up to 15 seconds per send and 20 seconds per recording.</p>
+    <p>Keep the devices nearby in a quiet room, use a comfortable speaker volume, and keep this page open. This acoustic demo may need another try. Channel decoding can leave errors; there is no checksum or authentication tag.</p>
+    <p>Your uploaded functions perform encryption, channel coding, modulation, filtering, decoding and decryption locally. The page downloads Python, NumPy and SciPy. Choose only notebooks you trust; imported Python is not sandboxed.</p>
+  </footer>
+</main>
+</body>
+</html>

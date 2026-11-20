@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Project 2D · Two-device guide</title><link rel="stylesheet" href="./style.css"></head>
+<body><main>
+  <p class="eyebrow">ENGR 76 / Project 2D</p>
+  <h1>From your laptop to a phone.</h1>
+  <p class="intro">Use your own completed Project 2c and 2d notebooks on both devices.</p>
+  <section class="workspace guide-page">
+    <h2>1. Save and transfer both notebooks</h2>
+    <p>Finish and save your Project 2d cryptography notebook. Also save your completed Project 2c notebook with convolutional encoding, the trellis, Viterbi decoding and all Part 3 signal helpers. An incomplete notebook will not become Ready.</p>
+    <p>For an iPhone and a Mac, AirDrop both .ipynb files to the phone and save them in Files. Otherwise open <a href="https://snapdrop.me" target="_blank" rel="noopener noreferrer">Snapdrop</a> on both devices on the same Wi-Fi, select the other device, send both files, and save the received files. If that service is unavailable on your network, use a file-transfer method you already use.</p>
+    <h2>2. Open the hosted demo</h2>
+    <p>Open <a href="https://engr-76.github.io/project2d/">Project 2d encrypted audio demo</a> in a browser on each device. No terminal, local server or downloaded demo folder is needed. Tap each notebook picker and choose the matching saved notebook. Wait for both to say Ready. If loading fails, finish the named function, save the notebook, and select the updated file again.</p>
+    <h2>3. Agree on settings</h2>
+    <p>Enter the same password separately on each device. Start with 100 bits/s, a 2000 Hz carrier, and the 1500–2500 Hz bandpass filter. Use a short message such as “Hello!” and comfortable speaker volume.</p>
+    <h2>4. Receive before you send</h2>
+    <p>On the phone, tap Receive, allow microphone access and wait for “listening.” Then tap Send on the laptop. After the entire tone has finished, tap Stop &amp; decode on the phone. Cancel stops an operation and releases the microphone. Recording also stops after 20 seconds.</p>
+    <h2>5. Compare the recovered bytes</h2>
+    <p>The phone uses its own uploaded Project 2c functions to recover the nonce and ciphertext from sound, then its Project 2d decrypt function to recover the message. Compare the text or hexadecimal bytes with the original. Channel errors may remain, and this cipher cannot verify the password or detect tampering.</p>
+    <p>After sending or receiving, open the optional experiment panel. Try another password, or use the correct password and flip a ciphertext bit. These experiments reuse the last packet locally; they do not send another tone.</p>
+    <h2>6. Share feedback</h2>
+    <p>Trying the live audio demo and providing feedback in the reflection survey are required. If a technical problem prevents completion, describe what you tried and what went wrong; a successful transmission is not required.</p>
+  </section>
+  <footer><p><a href="./index.html">← Back to the sound messenger</a></p></footer>
+</main></body></html>
